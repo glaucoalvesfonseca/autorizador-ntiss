@@ -1,4 +1,5 @@
 from selenium import webdriver
+from selenium.webdriver.support.ui import Select
 import win32con, win32api
 import time
 import random
@@ -7,9 +8,13 @@ def autentica_usuario():
     """
     Função que coleta credenciais do usuário que será usado como teste.
     """
-    usuario = input('Digite o nome de usuario: ')
-    senha = input('Digite a senha: ')
-    return usuario, senha
+    credenciais = dict()
+    with open('credenciais.conf') as arquivo:
+        for linha in arquivo:
+            print(linha)
+            (key, value) = linha.replace('\n','').split(':')
+            credenciais[key] = value
+    return credenciais
 
 def status_servico():
     while True:
@@ -67,13 +72,25 @@ def solicita_servico():
         #Informando dados do serviço de acordo com o arquivo
         with open('dados_Consulta_{}.conf'.format(status_do_servico)) as arquivo:
             for linha in arquivo:
-                (key, value) = linha.split()
-                dados_da_guia[key] = value                
-        print(dados_da_guia)
-        #Informando dados na tela do ntiss
-        driver.find_element_by_id('solicitacaoConsultaForm:numeroGuiaOperadora').send_keys(random.randint(1000))
-        driver.find_element_by_id('solicitacaoConsultaForm:carteira').send_keys(dados_da_guia[carteira])
-        driver.find_element_by_id('solicitacaoConsultaForm:nomeBeneficiario').send_keys(dados_da_guia[nomeBeneficiario])
+                (key, value) = linha.replace('\n','').split(':')
+                dados_da_guia[key] = value        
+        
+        #Número de guia aleatório
+        driver.find_element_by_id('solicitacaoConsultaForm:numeroGuiaOperadora').send_keys(random.randint(0, 1000))
+        #Adicionando campos
+        for campo in dados_da_guia:
+            if campo == 'carteira':
+                driver.find_element_by_id('solicitacaoConsultaForm:carteira').send_keys(dados_da_guia['carteira'])
+                time.sleep(5)
+            else:
+                driver.find_element_by_id('solicitacaoConsultaForm:{}'.format(campo)).send_keys(dados_da_guia[campo])
+        #Selecionando opção Não Acidentes em Indica Acidente (menu Dropdown)
+        Select(driver.find_element_by_id('solicitacaoConsultaForm:indicacaoAcidente_label')).select_by_visible_text('Não Acidentes')
+        #Selecionando Tipo de Consulta
+        Select(driver.find_element_by_id('solicitacaoConsultaForm:tipoConsulta_label')).select_by_visible_text('1 - Primeira')
+        #Inserindo valor do serviço
+        driver.find_element_by_id('solicitacaoConsultaForm:valorProcedimento_input').send_keys(1000)
+        
 
     elif tipo_de_servico == 2:
         #URL na página da Neki
@@ -85,15 +102,15 @@ def solicita_servico():
         servico = 'Internacao'
 
 credenciais = autentica_usuario()
-
+print(credenciais)
 #Iniciando browser e abrindo página do ntiss
 driver = webdriver.Chrome('C:/Temp/chromedriver.exe')
 driver.maximize_window()
 driver.get('http://ntiss.neki-it.com.br/ntiss/login.jsf')
 
 #Autenticando
-driver.find_element_by_id('login').send_keys(credenciais[0])
-driver.find_element_by_id('senha').send_keys(credenciais[1])
+driver.find_element_by_id('login').send_keys(credenciais['usuario'])
+driver.find_element_by_id('senha').send_keys(credenciais['senha'])
 driver.find_element_by_id('botaoEntrar').click()
 
 #Realiza o pedido
