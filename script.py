@@ -16,7 +16,12 @@ def solicita_servico():
         try:            
             mensagem = '\nQue tipo de serviço quer solicitar? (Digite o número)\n 1 - Consulta;\n 2 - Exame;\n 3 - Internação\n\n Opção: '
             tipo_de_servico = int(input(mensagem))
-            break
+            
+            #Verifica se o status é uma opção válida
+            if tipo_de_servico > 3 or tipo_de_servico < 1:
+                assert ValueError
+            else:
+                break
         #Em caso de erro, informa ao usuário e tenta de novo
         except ValueError as erro:
             print('Opção inválida. Tente de novo.\n')
@@ -30,8 +35,33 @@ def solicita_servico():
         url = 'http://ntiss.neki-it.com.br/ntiss//tiss/solicitacaoprocedimento/solicitacaoInternacao/solicitacaoInternacao.jsf'
     return url
 
+def status_servico():
+    while True:
+        #Solicita ao usuário um status de serviço
+        try:            
+            mensagem = '\nQue status quer que retorne? (Digite o número)\n 1 - Autorizado;\n 2 - Pendente;\n 3 - Negado\n\n Opção: '
+            status = int(input(mensagem))           
+
+            #Verifica se o status é uma opção válida
+            if status > 3 or status < 1:
+                assert ValueError
+            else:
+                break
+        #Em caso de erro, informa ao usuário e tenta de novo
+        except ValueError as erro:
+            print('Opção inválida. Tente de novo.\n')
+            time.sleep(3)
+        
+    if status == 1:
+        return 'Autorizado'
+    elif status == 2:
+        return 'Pendente'
+    elif status == 3:
+        return 'Negado'
+
 credenciais = autentica_usuario()
 url_servico = solicita_servico()
+dados_da_transacao = status_servico()
 
 #Iniciando browser e abrindo página do ntiss
 driver = webdriver.Chrome('C:/Temp/chromedriver.exe')
