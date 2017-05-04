@@ -19,7 +19,8 @@ def solicita_servico():
             
             #Verifica se o status é uma opção válida
             if tipo_de_servico > 3 or tipo_de_servico < 1:
-                assert ValueError
+                print('Opção inválida. Tente de novo.\n')
+                time.sleep(3)
             else:
                 break
         #Em caso de erro, informa ao usuário e tenta de novo
@@ -29,11 +30,14 @@ def solicita_servico():
 
     if tipo_de_servico == 1:
         url = 'http://ntiss.neki-it.com.br/ntiss//tiss/solicitacaoprocedimento/solicitacaoConsulta/solicitacaoConsulta.jsf'
+        servico = 'Consulta'
     elif tipo_de_servico == 2:
         url = 'http://ntiss.neki-it.com.br/ntiss//tiss/solicitacaoprocedimento/solicitacaoSadt/solicitacaoSadtFat.jsf'
+        servico = 'SADT'
     elif tipo_de_servico == 3:
         url = 'http://ntiss.neki-it.com.br/ntiss//tiss/solicitacaoprocedimento/solicitacaoInternacao/solicitacaoInternacao.jsf'
-    return url
+        servico = 'Internacao'
+    return url, servico
 
 def status_servico():
     while True:
@@ -44,7 +48,8 @@ def status_servico():
 
             #Verifica se o status é uma opção válida
             if status > 3 or status < 1:
-                assert ValueError
+                print('Opção inválida. Tente de novo.\n')
+                time.sleep(3)
             else:
                 break
         #Em caso de erro, informa ao usuário e tenta de novo
@@ -74,4 +79,4 @@ driver.find_element_by_id('senha').send_keys(credenciais[1])
 driver.find_element_by_id('botaoEntrar').click()
 
 #Acessando página da solicitação de acordo com função solicita_servico
-driver.get(url_servico)
+driver.get(url_servico[0])
