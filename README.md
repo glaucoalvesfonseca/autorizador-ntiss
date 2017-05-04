@@ -6,13 +6,13 @@ Ferramenta de Web Crawling para testar transações no autorizador
 URL: http://ntiss.neki-it.com.br/ntiss
 
 **Credenciais da Operadora:**   
-  Login: 290.unimedAraruama
-  Senha: 1234abcd
+<li> Login: 290.unimedAraruama
+<li> Senha: 1234abcd
   
 **Credenciais do Prestador:**
-  Login: 290.odir
-  Senha: 1234abcd
+<li> Login: 290.odir
+<li> Senha: 1234abcd
   
 **Credenciais do Funcionário:**
-  Login: 290.funcionarioOdir
-  Senha: 1234abcd
+<li> Login: 290.funcionarioOdir
+<li> Senha: 1234abcd
