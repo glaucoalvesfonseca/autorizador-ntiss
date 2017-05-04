@@ -66,7 +66,7 @@ def status_servico():
 
 credenciais = autentica_usuario()
 url_servico = solicita_servico()
-dados_da_transacao = status_servico()
+status_do_servico = status_servico()
 
 #Iniciando browser e abrindo página do ntiss
 driver = webdriver.Chrome('C:/Temp/chromedriver.exe')
