@@ -102,36 +102,36 @@ def solicita_servico():
         url = 'http://ntiss.neki-it.com.br/ntiss//tiss/solicitacaoprocedimento/solicitacaoSadt/solicitacaoSadtFat.jsf'
         driver.get(url)
 
-        #Cada campo da guia de solicitação será armazenada em um dicionário
-        dados_da_guia = dict()
-        #Informando dados do serviço de acordo com o arquivo
-        with open('dados_SADT_{}.conf'.format(status_do_servico)) as arquivo:            
-            for linha in arquivo:                    
-                    (key, value) = linha.replace('\n','').split(',')
-                    dados_da_guia[key] = value
-        print(dados_da_guia)
-        #Número de guia aleatório
-        driver.find_element_by_id('solicitacaoSadtForm:j_idt122').send_keys(random.randint(0, 1000))        
-        #Adicionando campos
-        for campo in dados_da_guia:
-            #driver.find_element_by_id('solicitacaoSadtForm:{}'.format(campo)).clear()
-            driver.find_element_by_id('solicitacaoSadtForm:{}'.format(campo)).send_keys(dados_da_guia[campo])
-            driver.find_element_by_id('solicitacaoSadtForm:{}'.format(campo)).send_keys(Keys.TAB)
-            time.sleep(1)
-        #Informando procedimento
-        #Exames solicitados
-        time.sleep(1)
+        #Exames solicitados        
         driver.find_element_by_id('solicitacaoSadtForm:acProcedimento_input').send_keys(40304361)
         time.sleep(2)
         driver.find_element_by_id('solicitacaoSadtForm:acProcedimento_input').send_keys(Keys.ENTER)
         time.sleep(2)
         driver.find_element_by_id('solicitacaoSadtForm:j_idt271').click()
         time.sleep(3)
+        
         #Exames realizados
         driver.find_element_by_id('solicitacaoSadtForm:acProcedimentoExec_input').send_keys(40304361)
         time.sleep(2)
-        driver.find_element_by_id('solicitacaoSadtForm:acProcedimento_input').send_keys(Keys.ENTER)
+        driver.find_element_by_xpath('//*[@id="solicitacaoSadtForm:acProcedimentoExec_panel"]/ul/li').click()
+        #driver.find_element_by_id('solicitacaoSadtForm:acProcedimento_input').send_keys(Keys.ENTER)
         time.sleep(2)
+
+        #Cada campo da guia de solicitação será armazenada em um dicionário
+        dados_da_guia = dict()
+        #Informando dados do serviço de acordo com o arquivo
+        with open('dados_SADT_{}.conf'.format(status_do_servico)) as arquivo:
+            for linha in arquivo:                    
+                    (key, value) = linha.replace('\n','').split(',')
+                    dados_da_guia[key] = value
+
+        #Número de guia aleatório
+        driver.find_element_by_id('solicitacaoSadtForm:j_idt122').send_keys(random.randint(0, 1000))
+        #Adicionando campos
+        for campo in dados_da_guia:            
+            driver.find_element_by_id('solicitacaoSadtForm:{}'.format(campo)).send_keys(dados_da_guia[campo])
+            driver.find_element_by_id('solicitacaoSadtForm:{}'.format(campo)).send_keys(Keys.TAB)
+            time.sleep(1)
 
         #Menus Dropdown de Médico Solicitante
         #Conselho profissional
@@ -142,10 +142,10 @@ def solicita_servico():
         driver.find_element_by_xpath('//*[@id="solicitacaoSadtForm:uf_20"]').click()
         #CBOS
         driver.find_element_by_xpath('//*[@id="solicitacaoSadtForm:cbos"]/button/span[1]').click()
-        time.sleep(1)
+        time.sleep(2)
         driver.find_element_by_xpath('//*[@id="solicitacaoSadtForm:cbos_panel"]/ul/li[26]').click()
         time.sleep(2)
-        
+
         #Menus Dropdown de Dados do Atendimento
         #Tipo de Atendimento
         driver.find_element_by_id('solicitacaoSadtForm:tipoAtendimento_label').click()
@@ -156,9 +156,22 @@ def solicita_servico():
         #Tipo Consulta
         driver.find_element_by_id('solicitacaoSadtForm:tipoConsulta_label').click()
         driver.find_element_by_xpath('//*[@id="solicitacaoSadtForm:tipoConsulta_1"]').click()
+        #Menus Dropdown de Dados da Execução
+        #Via
+        driver.find_element_by_id('solicitacaoSadtForm:via_label').click()        
+        driver.find_element_by_xpath('//*[@id="solicitacaoSadtForm:via_1"]').click()
+        time.sleep(1)
+        #Téc
+        driver.find_element_by_id('solicitacaoSadtForm:tec_label').click()
+        driver.find_element_by_xpath('//*[@id="solicitacaoSadtForm:tec_1"]').click()
+        time.sleep(1)
+
+        #Por fim, adiciona o procedimento executado
+        driver.find_element_by_id('solicitacaoSadtForm:j_idt399').click()
         
         #Enviando solicitação
-        driver.find_element_by_id('solicitacaoSadtForm:botaoSave').click()    
+        time.sleep(1)
+        driver.find_element_by_id('solicitacaoSadtForm:botaoSave').click()
 
 credenciais = autentica_usuario()
 
