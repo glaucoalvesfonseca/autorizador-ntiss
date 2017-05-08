@@ -60,7 +60,7 @@ def tipo_servico():
     return tipo_de_servico
 
 def solicita_servico():    
-    #Realizando solicitação
+    #Realizando solicitação de consulta
     if tipo_de_servico == 1:
         #URL na página da Neki
         url = 'http://ntiss.neki-it.com.br/ntiss//tiss/solicitacaoprocedimento/solicitacaoConsulta/solicitacaoConsulta.jsf'        
@@ -81,7 +81,7 @@ def solicita_servico():
             if campo == 'carteira':
                 driver.find_element_by_id('solicitacaoConsultaForm:carteira').send_keys(dados_da_guia['carteira'])
                 driver.find_element_by_id('solicitacaoConsultaForm:carteira').send_keys(Keys.TAB)
-                time.sleep(5)
+                time.sleep(2)
             else:
                 driver.find_element_by_id('solicitacaoConsultaForm:{}'.format(campo)).send_keys(dados_da_guia[campo])
         #Selecionando opção Não Acidentes em Indica Acidente (menu Dropdown)
@@ -99,7 +99,28 @@ def solicita_servico():
     elif tipo_de_servico == 2:
         #URL na página da Neki
         url = 'http://ntiss.neki-it.com.br/ntiss//tiss/solicitacaoprocedimento/solicitacaoSadt/solicitacaoSadtFat.jsf'
-        servico = 'SADT'
+        driver.get(url)
+
+        #Cada campo da guia de solicitação será armazenada em um dicionário
+        dados_da_guia = dict()
+        #Informando dados do serviço de acordo com o arquivo
+        with open('dados_SADT_{}.conf'.format(status_do_servico)) as arquivo:
+            for linha in arquivo:
+                (key, value) = linha.replace('\n','').split(':')
+                dados_da_guia[key] = value
+        
+        #Número de guia aleatório
+        driver.find_element_by_id('solicitacaoSadtForm:j_idt122').send_keys(random.randint(0, 1000))
+        time.sleep(2)
+        #Adicionando campos
+        for campo in dados_da_guia:
+            if campo == 'carteira':
+                driver.find_element_by_id('solicitacaoSadtForm:carteira').send_keys(dados_da_guia['carteira'])
+                driver.find_element_by_id('solicitacaoSadtForm:carteira').send_keys(Keys.TAB)
+                time.sleep(5)
+            else:
+                driver.find_element_by_id('solicitacaoSadtForm:{}'.format(campo)).send_keys(dados_da_guia[campo])
+
     elif tipo_de_servico == 3:
         #URL na página da Neki
         url = 'http://ntiss.neki-it.com.br/ntiss//tiss/solicitacaoprocedimento/solicitacaoInternacao/solicitacaoInternacao.jsf'
