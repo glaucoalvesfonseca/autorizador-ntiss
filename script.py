@@ -120,6 +120,14 @@ def solicita_servico():
                 time.sleep(5)
             else:
                 driver.find_element_by_id('solicitacaoSadtForm:{}'.format(campo)).send_keys(dados_da_guia[campo])
+        
+        #Menus Dropdown de Médico Solicitante
+        #Conselho profissional
+        driver.find_element_by_id('solicitacaoSadtForm:conselhoProfissional_label').click()
+        driver.find_element_by_xpath('//*[@id="solicitacaoSadtForm:conselhoProfissional_6"]"]').click()
+        #UF
+        driver.find_element_by_id('solicitacaoSadtForm:conselhoProfissional_label').click()
+        driver.find_element_by_xpath('//*[@id="solicitacaoSadtForm:conselhoProfissional_6"]"]').click()
 
     elif tipo_de_servico == 3:
         #URL na página da Neki
