@@ -44,11 +44,11 @@ def tipo_servico():
     while True:
         #Solicita ao usuário um tipo de serviço
         try:            
-            mensagem = '\nQue tipo de serviço quer solicitar? (Digite o número)\n 1 - Consulta;\n 2 - Exame;\n 3 - Internação\n\n Opção: '
+            mensagem = '\nQue tipo de serviço quer solicitar? (Digite o número)\n 1 - Consulta;\n 2 - Exame;\n\n Opção: '
             tipo_de_servico = int(input(mensagem))
             
             #Verifica se o status é uma opção válida
-            if tipo_de_servico > 3 or tipo_de_servico < 1:
+            if tipo_de_servico > 2 or tipo_de_servico < 1:
                 print('Opção inválida. Tente de novo.\n')
                 time.sleep(3)
             else:
