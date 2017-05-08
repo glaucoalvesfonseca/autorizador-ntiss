@@ -12,7 +12,7 @@ def autentica_usuario():
     credenciais = dict()
     with open('credenciais.conf') as arquivo:
         for linha in arquivo:            
-            (key, value) = linha.replace('\n','').split(':')
+            (key, value) = linha.replace('\n','').split(',', 1)
             credenciais[key] = value
     return credenciais
 def status_servico():
@@ -71,7 +71,7 @@ def solicita_servico():
         #Informando dados do serviço de acordo com o arquivo
         with open('dados_Consulta_{}.conf'.format(status_do_servico)) as arquivo:
             for linha in arquivo:
-                (key, value) = linha.replace('\n','').split(':')
+                (key, value) = linha.replace('\n','').split(',')
                 dados_da_guia[key] = value
 
         #Número de guia aleatório
@@ -106,39 +106,32 @@ def solicita_servico():
         dados_da_guia = dict()
         #Informando dados do serviço de acordo com o arquivo
         with open('dados_SADT_{}.conf'.format(status_do_servico)) as arquivo:            
-            try:
-                for linha in arquivo:                    
-                    (key, value) = linha.replace('\n','').split(':')
+            for linha in arquivo:                    
+                    (key, value) = linha.replace('\n','').split(',')
                     dados_da_guia[key] = value
-            except:
-                pass
+        print(dados_da_guia)
         #Número de guia aleatório
         driver.find_element_by_id('solicitacaoSadtForm:j_idt122').send_keys(random.randint(0, 1000))        
         #Adicionando campos
         for campo in dados_da_guia:
-            if campo == 'carteira':                
-                driver.find_element_by_id('solicitacaoSadtForm:carteira').send_keys(dados_da_guia['carteira'])
-                driver.find_element_by_id('solicitacaoSadtForm:carteira').send_keys(Keys.TAB)
-                time.sleep(2)
-            else:
-                driver.find_element_by_id('solicitacaoSadtForm:{}'.format(campo)).clear()
-                driver.find_element_by_id('solicitacaoSadtForm:{}'.format(campo)).send_keys(dados_da_guia[campo])
-                time.sleep(0.5)
+            #driver.find_element_by_id('solicitacaoSadtForm:{}'.format(campo)).clear()
+            driver.find_element_by_id('solicitacaoSadtForm:{}'.format(campo)).send_keys(dados_da_guia[campo])
+            driver.find_element_by_id('solicitacaoSadtForm:{}'.format(campo)).send_keys(Keys.TAB)
+            time.sleep(1)
         #Informando procedimento
         #Exames solicitados
+        time.sleep(1)
         driver.find_element_by_id('solicitacaoSadtForm:acProcedimento_input').send_keys(40304361)
         time.sleep(2)
         driver.find_element_by_id('solicitacaoSadtForm:acProcedimento_input').send_keys(Keys.ENTER)
-        time.sleep(1)
+        time.sleep(2)
         driver.find_element_by_id('solicitacaoSadtForm:j_idt271').click()
-        time.sleep(1)
+        time.sleep(3)
         #Exames realizados
         driver.find_element_by_id('solicitacaoSadtForm:acProcedimentoExec_input').send_keys(40304361)
         time.sleep(2)
         driver.find_element_by_id('solicitacaoSadtForm:acProcedimento_input').send_keys(Keys.ENTER)
-        time.sleep(1)
-        driver.find_element_by_id('solicitacaoSadtForm:j_idt399').click()
-        time.sleep(1)
+        time.sleep(2)
 
         #Menus Dropdown de Médico Solicitante
         #Conselho profissional
@@ -165,18 +158,14 @@ def solicita_servico():
         driver.find_element_by_xpath('//*[@id="solicitacaoSadtForm:tipoConsulta_1"]').click()
         
         #Enviando solicitação
-        driver.find_element_by_id('solicitacaoSadtForm:botaoSave').click()
-    elif tipo_de_servico == 3:
-        #URL na página da Neki
-        url = 'http://ntiss.neki-it.com.br/ntiss//tiss/solicitacaoprocedimento/solicitacaoInternacao/solicitacaoInternacao.jsf'
-        servico = 'Internacao'
+        driver.find_element_by_id('solicitacaoSadtForm:botaoSave').click()    
 
 credenciais = autentica_usuario()
+
 #Tipo de serviço que quer solicitar
 tipo_de_servico = tipo_servico()
 #Status que quer retornar
 status_do_servico = status_servico()
-
 
 #Iniciando browser e abrindo página do ntiss
 driver = webdriver.Chrome('C:/Temp/chromedriver.exe')
