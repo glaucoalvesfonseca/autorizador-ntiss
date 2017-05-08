@@ -120,7 +120,11 @@ def solicita_servico():
                 time.sleep(5)
             else:
                 driver.find_element_by_id('solicitacaoSadtForm:{}'.format(campo)).send_keys(dados_da_guia[campo])
-        
+        #Informando procedimento
+        driver.find_element_by_id('solicitacaoSadtForm:acProcedimento_input').send_keys(40304361)
+        time.sleep(2)
+        driver.find_element_by_xpath('//*[@id="solicitacaoSadtForm:acProcedimento_panel"]/ul/li').click()
+
         #Menus Dropdown de Médico Solicitante
         #Conselho profissional
         driver.find_element_by_id('solicitacaoSadtForm:conselhoProfissional_label').click()
@@ -128,6 +132,21 @@ def solicita_servico():
         #UF
         driver.find_element_by_id('solicitacaoSadtForm:conselhoProfissional_label').click()
         driver.find_element_by_xpath('//*[@id="solicitacaoSadtForm:conselhoProfissional_6"]"]').click()
+        #CBOS
+        driver.find_element_by_id('solicitacaoSadtForm:cbos_input').click()
+        driver.find_element_by_xpath('//*[@id="solicitacaoSadtForm:cbos_panel"]/ul/li[26]').click()
+        time.sleep(2)
+        
+        #Menus Dropdown de Dados do Atendimento
+        #Tipo de Atendimento
+        driver.find_element_by_id('solicitacaoSadtForm:tipoAtendimento_label').click()
+        driver.find_element_by_xpath('//*[@id="solicitacaoSadtForm:tipoAtendimento_5"]').click()
+        #Indicação Acidente
+        driver.find_element_by_id('solicitacaoSadtForm:indicacaoAcidente_label').click()
+        driver.find_element_by_xpath('//*[@id="solicitacaoSadtForm:indicacaoAcidente_1"]').click()
+        #Tipo Consulta
+        driver.find_element_by_id('solicitacaoSadtForm:tipoConsulta_label').click()
+        driver.find_element_by_xpath('//*[@id="solicitacaoSadtForm:tipoConsulta_1"]"]').click()
 
     elif tipo_de_servico == 3:
         #URL na página da Neki
